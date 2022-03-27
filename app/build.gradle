@@ -35,6 +35,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         useIR = true
+        freeCompilerArgs += [
+                "-Xopt-in=kotlin.RequiresOptIn",
+                "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                "-Xopt-in=kotlin.Experimental",
+                "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi"
+
+        ]
     }
     buildFeatures {
         compose true
@@ -69,6 +78,10 @@ dependencies {
     implementation(project(':domain'))
     implementation(project(':data'))
 
+    // Compose dependencies
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
     // Room
     implementation "androidx.room:room-runtime:2.4.1"
     kapt "androidx.room:room-compiler:2.4.1"
@@ -79,4 +92,8 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+
+    // Google Maps
+    implementation "com.google.android.gms:play-services-maps:18.0.2"
+    implementation "com.google.maps.android:maps-compose:1.0.0"
 }

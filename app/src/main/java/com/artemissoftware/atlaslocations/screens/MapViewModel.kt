@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artemissoftware.atlaslocations.util.MapStyle
 import com.artemissoftware.domain.repositories.PinRepository
+import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -19,24 +21,24 @@ class MapsViewModel @Inject constructor(
     var state by mutableStateOf(MapState())
 
     init {
-        viewModelScope.launch {
-            repository.getPins().collectLatest { spots ->
-                state = state.copy(
-                    parkingSpots = spots
-                )
-            }
-        }
+//        viewModelScope.launch {
+//            repository.getPins().collectLatest { spots ->
+//                state = state.copy(
+//                    parkingSpots = spots
+//                )
+//            }
+//        }
     }
 
     fun onEvent(event: MapEvent) {
         when(event) {
             is MapEvent.ToggleMapStyle -> {
                 state = state.copy(
-//                    properties = state.properties.copy(
-//                        mapStyleOptions = if(state.isStylishMap) {
-//                            null
-//                        } else MapStyleOptions(MapStyle.json),
-//                    ),
+                    properties = state.properties.copy(
+                        mapStyleOptions = if(state.isStylishMap) {
+                            null
+                        } else MapStyleOptions(MapStyle.json),
+                    ),
                     isStylishMap = !state.isStylishMap
                 )
             }

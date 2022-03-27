@@ -7,8 +7,9 @@ import com.artemissoftware.domain.models.Pin
 import com.artemissoftware.domain.repositories.PinRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class PinRepositoryImpl(
+class PinRepositoryImpl @Inject constructor(
     private val dao: PinDao
 ): PinRepository {
 
