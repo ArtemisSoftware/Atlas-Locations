@@ -69,7 +69,5 @@ private fun PinDetail(title: String? = null, description: String){
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-
     PinCard(pin = Pin.getMock())
-
 }

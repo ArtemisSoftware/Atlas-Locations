@@ -3,11 +3,11 @@ package com.artemissoftware.atlaslocations.models
 import java.util.*
 
 data class Pin (
+    val id: Int? = null,
     val latitude: Double,
     val longitude: Double,
     val date: Date,
     val address: String){
-
 
     companion object{
 
@@ -19,9 +19,6 @@ data class Pin (
                 date = Date(),
                 address = "Greek Pantheon Street"
             )
-
         }
-
     }
-
 }
