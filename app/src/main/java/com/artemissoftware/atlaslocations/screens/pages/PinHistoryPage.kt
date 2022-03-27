@@ -58,8 +58,5 @@ fun PinHistoryPage(pins: List<Pin>){
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    
-    val pins = listOf(Pin.getMock(), Pin.getMock())
-    
-    PinHistoryPage(pins = pins)
+    PinHistoryPage(pins = listOf(Pin.getMock(), Pin.getMock()))
 }
