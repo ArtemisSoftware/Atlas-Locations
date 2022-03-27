@@ -39,7 +39,7 @@ fun MapScreen(
 
         },
         sheetShape = RoundedCornerShape(topStart = radius, topEnd = radius),
-        sheetPeekHeight = 60.dp,
+        sheetPeekHeight = 30.dp,
         sheetContent = {
             PinHistoryPage(pins = pins)
         },
