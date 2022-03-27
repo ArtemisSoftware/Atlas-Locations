@@ -14,12 +14,12 @@ import com.artemissoftware.atlaslocations.screens.pages.PinHistoryPage
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Marker
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.maps.android.compose.*
 
 @ExperimentalMaterialApi
 @Composable
@@ -29,6 +29,10 @@ fun MapScreen(
 
     val pins = listOf(Pin.getMock(), Pin.getMock())
 
+    val singapore = LatLng(1.35, 103.87)
+    val cameraPositionState: CameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(singapore, 11f)
+    }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -46,12 +50,13 @@ fun MapScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.onEvent(MapEvent.ToggleMapStyle)
+                    //viewModel.onEvent(MapEvent.ToggleMapStyle)
+                    cameraPositionState.move(CameraUpdateFactory.zoomIn())
                 }
             ) {
                 Icon(
                     imageVector = if (viewModel.state.isStylishMap) Icons.Default.ToggleOff else Icons.Default.ToggleOn,
-                    contentDescription = "Toggle Fallout map"
+                    contentDescription = "Toggle map style"
                 )
             }
         },
@@ -66,6 +71,7 @@ fun MapScreen(
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = viewModel.state.properties,
+            cameraPositionState = cameraPositionState,
             uiSettings = uiSettings,
         ) {
 //            viewModel.state.parkingSpots.forEach { spot ->

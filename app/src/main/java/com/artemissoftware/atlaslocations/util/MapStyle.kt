@@ -1,136 +1,86 @@
 package com.artemissoftware.atlaslocations.util
 
 object MapStyle {
-
     val json = """
-    [
+[
     {
-        "featureType": "water",
-        "elementType": "geometry",
+        "featureType": "administrative",
+        "elementType": "labels.text.fill",
         "stylers": [
-        {
-            "color": "#004358"
-        }
+            {
+                "color": "#444444"
+            }
         ]
     },
     {
         "featureType": "landscape",
-        "elementType": "geometry",
+        "elementType": "all",
         "stylers": [
-        {
-            "color": "#1f8a70"
-        }
+            {
+                "color": "#f2f2f2"
+            }
         ]
     },
     {
         "featureType": "poi",
-        "elementType": "geometry",
+        "elementType": "all",
         "stylers": [
-        {
-            "color": "#1f8a70"
-        }
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "all",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 45
+            }
         ]
     },
     {
         "featureType": "road.highway",
-        "elementType": "geometry",
+        "elementType": "all",
         "stylers": [
-        {
-            "color": "#fd7400"
-        }
+            {
+                "visibility": "simplified"
+            }
         ]
     },
     {
         "featureType": "road.arterial",
-        "elementType": "geometry",
-        "stylers": [
-        {
-            "color": "#1f8a70"
-        },
-        {
-            "lightness": -20
-        }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "geometry",
-        "stylers": [
-        {
-            "color": "#1f8a70"
-        },
-        {
-            "lightness": -17
-        }
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-        {
-            "color": "#ffffff"
-        },
-        {
-            "visibility": "on"
-        },
-        {
-            "weight": 0.9
-        }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
-        {
-            "visibility": "on"
-        },
-        {
-            "color": "#ffffff"
-        }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-        {
-            "visibility": "simplified"
-        }
-        ]
-    },
-    {
         "elementType": "labels.icon",
         "stylers": [
-        {
-            "visibility": "off"
-        }
+            {
+                "visibility": "off"
+            }
         ]
     },
     {
         "featureType": "transit",
-        "elementType": "geometry",
+        "elementType": "all",
         "stylers": [
-        {
-            "color": "#1f8a70"
-        },
-        {
-            "lightness": -10
-        }
+            {
+                "visibility": "off"
+            }
         ]
     },
-    {},
     {
-        "featureType": "administrative",
-        "elementType": "geometry",
+        "featureType": "water",
+        "elementType": "all",
         "stylers": [
-        {
-            "color": "#1f8a70"
-        },
-        {
-            "weight": 0.7
-        }
+            {
+                "color": "#46bcec"
+            },
+            {
+                "visibility": "on"
+            }
         ]
     }
-    ]
+]
     """.trimIndent()
 }

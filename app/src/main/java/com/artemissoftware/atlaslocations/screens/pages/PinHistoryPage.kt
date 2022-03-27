@@ -26,6 +26,7 @@ fun PinHistoryPage(pins: List<Pin>){
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
+
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -46,10 +47,18 @@ fun PinHistoryPage(pins: List<Pin>){
             }
         }
 
-        LazyColumn(/*modifier = Modifier.fillMaxHeight()*/) {
-            items(pins) { pin ->
-                PinCard(pin = pin)
+        if(pins.isEmpty()) {
+
+            LazyColumn(/*modifier = Modifier.fillMaxHeight()*/) {
+                items(pins) { pin ->
+                    PinCard(pin = pin)
+                }
             }
+        }
+        else{
+            Text(
+                text = "No locations available"
+            )
         }
     }
 
