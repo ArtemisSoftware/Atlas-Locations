@@ -1,5 +1,9 @@
 package com.artemissoftware.atlaslocations.screens
 
+import android.content.Context
+import android.location.Geocoder
+import android.location.Location
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,21 +19,34 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.ToggleOff
 import androidx.compose.material.icons.filled.ToggleOn
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.*
+import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
 fun MapScreen(
+    location: Location? = null,
     viewModel: MapsViewModel = viewModel()
 ){
 
     val pins = listOf(Pin.getMock(), Pin.getMock())
 
-    val singapore = LatLng(1.35, 103.87)
+    var singapore = LatLng(1.35, 103.87)
+
+    location?.let {
+        singapore = LatLng(it.latitude, it.longitude)
+        viewModel.onEvent(MapEvent.ToggleMapStyle)
+    }
+
+
     val cameraPositionState: CameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(singapore, 11f)
     }
@@ -68,12 +85,86 @@ fun MapScreen(
 
     ) {
 
+
+//        Card (modifier = Modifier.background(Color.Transparent)
+//            .padding(12.dp)
+//            ,elevation = 10.dp
+//        ){
+//            OutlinedTextField(
+//                value =singapore.latitude.toString(),
+//
+//                onValueChange = {
+//
+//                },
+//                textStyle = TextStyle(
+//                    color = Color.Red,
+//                ),
+//                modifier = Modifier.background(Color.Transparent)
+//                , leadingIcon = {
+//                    // In this method we are specifying
+//                    // our leading icon and its color.
+//                    Icon(
+//                        imageVector = Icons.Default.LocationOn,
+//                        contentDescription = "image",
+//                        tint = Color.Green
+//                    )
+//                },
+//            )
+//
+//        }
+
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = viewModel.state.properties,
             cameraPositionState = cameraPositionState,
             uiSettings = uiSettings,
         ) {
+
+
+//
+//            Card (modifier = Modifier.background(Color.Transparent)
+//                .padding(12.dp)
+//                ,elevation = 10.dp
+//            ){
+//                OutlinedTextField(
+//                    value =singapore.latitude.toString(),
+//
+//                    onValueChange = {
+//
+//                    },
+//                    textStyle = TextStyle(
+//                        color = Color.Red,
+//                    ),
+//                    modifier = Modifier.background(Color.Transparent)
+//                    , leadingIcon = {
+//                        // In this method we are specifying
+//                        // our leading icon and its color.
+//                        Icon(
+//                            imageVector = Icons.Default.LocationOn,
+//                            contentDescription = "image",
+//                            tint = Color.Green
+//                        )
+//                    },
+//                )
+//
+//            }
+//
+
+
+
+
+
+            Marker(
+                position = LatLng(singapore.latitude, singapore.longitude),
+                title = "Current (${singapore.latitude}, ${singapore.longitude}, ${getAddress(LocalContext.current, singapore)})",
+                icon = BitmapDescriptorFactory.defaultMarker(
+                    BitmapDescriptorFactory.HUE_GREEN
+                )
+            )
+
+
+
 //            viewModel.state.parkingSpots.forEach { spot ->
 //                Marker(
 //                    position = LatLng(spot.lat, spot.lng),
@@ -93,8 +184,30 @@ fun MapScreen(
 //            }
         }
 
+
+
+
+
+
+
+
+
+
+
+
     }
 }
+
+
+private fun getAddress(context: Context, location: LatLng) : String{
+
+    val geocoder = Geocoder(context, Locale.getDefault());
+
+    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
+    return addresses[0].getAddressLine(0);
+}
+
+
 
 @ExperimentalMaterialApi
 @Preview(showBackground = true)
