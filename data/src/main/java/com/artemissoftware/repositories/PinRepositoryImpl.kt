@@ -26,4 +26,12 @@ class PinRepositoryImpl @Inject constructor(
             spots.map { it.toPin() }
         }
     }
+
+    override fun getLastLocation(): Pin? {
+        return dao.getLastLocation()?.toPin()
+    }
+
+    override suspend fun deleteOldestPin() {
+        dao.deleteOldestPin()
+    }
 }
