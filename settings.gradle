@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AtlasLocations"
 include ':app'
+include ':data'
