@@ -12,9 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.artemissoftware.atlaslocations.Greeting
-import com.artemissoftware.atlaslocations.models.Pin
-import com.artemissoftware.atlaslocations.ui.theme.AtlasLocationsTheme
+import com.artemissoftware.domain.models.Pin
 
 @Composable
 fun PinCard(pin: Pin){
@@ -69,5 +67,5 @@ private fun PinDetail(title: String? = null, description: String){
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    PinCard(pin = Pin.getMock())
+    PinCard(pin = com.artemissoftware.domain.models.Pin.getMock())
 }

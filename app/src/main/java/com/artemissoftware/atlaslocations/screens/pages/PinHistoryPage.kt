@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.atlaslocations.composables.PinCard
-import com.artemissoftware.atlaslocations.models.Pin
+import com.artemissoftware.domain.models.Pin
 
 @Composable
 fun PinHistoryPage(pins: List<Pin>){

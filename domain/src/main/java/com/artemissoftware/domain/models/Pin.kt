@@ -1,4 +1,4 @@
-package com.artemissoftware.atlaslocations.models
+package com.artemissoftware.domain.models
 
 import java.util.*
 
@@ -11,7 +11,7 @@ data class Pin (
 
     companion object{
 
-        fun getMock(): Pin{
+        fun getMock(): Pin {
 
             return Pin(
                 latitude = 1.35,
