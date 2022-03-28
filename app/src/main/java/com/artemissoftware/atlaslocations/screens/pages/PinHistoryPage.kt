@@ -17,7 +17,9 @@ import com.artemissoftware.atlaslocations.composables.PinCard
 import com.artemissoftware.domain.models.Pin
 
 @Composable
-fun PinHistoryPage(pins: List<Pin>){
+fun PinHistoryPage(
+    pins: List<Pin>,
+    onRemovePins: () -> Unit){
 
     Column(
         modifier = Modifier
@@ -38,16 +40,20 @@ fun PinHistoryPage(pins: List<Pin>){
                 modifier = Modifier.weight(.80f)
             )
 
+            if(pins.isNotEmpty()) {
 
-            IconButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete",
-                )
+                IconButton(onClick = {
+                    onRemovePins()
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete",
+                    )
+                }
             }
         }
 
-        if(pins.isEmpty()) {
+        if(pins.isNotEmpty()) {
 
             LazyColumn(/*modifier = Modifier.fillMaxHeight()*/) {
                 items(pins) { pin ->
@@ -67,5 +73,5 @@ fun PinHistoryPage(pins: List<Pin>){
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    PinHistoryPage(pins = listOf(Pin.getMock(), Pin.getMock()))
+    PinHistoryPage(pins = listOf(Pin.getMock(), Pin.getMock()), onRemovePins = {})
 }

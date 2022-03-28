@@ -27,7 +27,7 @@ class PinRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getLastLocation(): Pin? {
+    override suspend fun getLastLocation(): Pin? {
         return dao.getLastLocation()?.toPin()
     }
 

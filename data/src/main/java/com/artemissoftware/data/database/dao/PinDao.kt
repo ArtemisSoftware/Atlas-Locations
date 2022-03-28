@@ -16,8 +16,8 @@ interface PinDao {
     @Query("SELECT * FROM pinentity")
     fun getParkingSpots(): Flow<List<PinEntity>>
 
-    @Query("SELECT * FROM pinentity WHERE id = ( SELECT MIN(id) FROM pinentity ) ")
-    fun getLastLocation(): PinEntity?
+    @Query("SELECT * FROM pinentity WHERE current = 1 ")
+    suspend fun getLastLocation(): PinEntity?
 
 
     @Query("DELETE FROM pinentity WHERE id = ( SELECT MIN(id) FROM pinentity )")

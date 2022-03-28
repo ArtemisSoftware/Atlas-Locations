@@ -90,16 +90,26 @@ class MainActivity : ComponentActivity(), PermissionListener, OnSuccessListener<
 
                 // location is received
                 Log.d(TAG, "updating")
-                mCurrentLocation = locationResult?.getLastLocation()!!;
 
-                setContent {
-                    AtlasLocationsTheme {
-                        // A surface container using the 'background' color from the theme
-                        Surface(color = MaterialTheme.colors.background) {
-                            MapScreen(location = mCurrentLocation)
+                locationResult.lastLocation.let {
+
+                    if(it.accuracy < 20){
+                        setContent {
+                            AtlasLocationsTheme {
+                                // A surface container using the 'background' color from the theme
+                                Surface(color = MaterialTheme.colors.background) {
+                                    MapScreen(location = it)
+                                }
+                            }
                         }
                     }
+
                 }
+
+
+                mCurrentLocation = locationResult?.getLastLocation()!!;
+
+
             }
         }
 

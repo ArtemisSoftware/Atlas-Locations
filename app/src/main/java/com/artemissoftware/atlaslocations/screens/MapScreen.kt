@@ -1,10 +1,10 @@
 package com.artemissoftware.atlaslocations.screens
 
-import android.content.Context
-import android.location.Geocoder
 import android.location.Location
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -19,12 +19,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.ToggleOff
-import androidx.compose.material.icons.filled.ToggleOn
+import androidx.compose.material.icons.filled.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
+import com.artemissoftware.atlaslocations.composables.Tracker
+import com.artemissoftware.atlaslocations.screens.mappers.toPin
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.*
@@ -37,13 +37,26 @@ fun MapScreen(
     viewModel: MapsViewModel = viewModel()
 ){
 
-    val pins = listOf(Pin.getMock(), Pin.getMock())
+    val context =  LocalContext.current
+    val pins = viewModel.state.pins
 
     var singapore = LatLng(1.35, 103.87)
+    var changing = LatLng(1.35, 103.87)
 
     location?.let {
         singapore = LatLng(it.latitude, it.longitude)
-        viewModel.onEvent(MapEvent.ToggleMapStyle)
+        changing = LatLng(it.latitude, it.longitude)
+        if(viewModel.state.collecting){
+
+            viewModel.currentPin?.let{
+                singapore = LatLng(it.latitude, it.longitude)
+                viewModel.onEvent(MapEvent.UpdateLocation(changing.toPin(context)))
+            }
+
+
+
+        }
+
     }
 
 
@@ -67,8 +80,7 @@ fun MapScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    //viewModel.onEvent(MapEvent.ToggleMapStyle)
-                    cameraPositionState.move(CameraUpdateFactory.zoomIn())
+                    viewModel.onEvent(MapEvent.ToggleMapStyle)
                 }
             ) {
                 Icon(
@@ -80,114 +92,118 @@ fun MapScreen(
         sheetShape = RoundedCornerShape(topStart = radius, topEnd = radius),
         sheetPeekHeight = 30.dp,
         sheetContent = {
-            PinHistoryPage(pins = pins)
+            PinHistoryPage(
+                pins = pins,
+                onRemovePins = {
+                    viewModel.onEvent(MapEvent.DeleteHistory)
+                }
+            )
         },
 
     ) {
 
 
-//        Card (modifier = Modifier.background(Color.Transparent)
-//            .padding(12.dp)
-//            ,elevation = 10.dp
-//        ){
-//            OutlinedTextField(
-//                value =singapore.latitude.toString(),
-//
-//                onValueChange = {
-//
-//                },
-//                textStyle = TextStyle(
-//                    color = Color.Red,
-//                ),
-//                modifier = Modifier.background(Color.Transparent)
-//                , leadingIcon = {
-//                    // In this method we are specifying
-//                    // our leading icon and its color.
-//                    Icon(
-//                        imageVector = Icons.Default.LocationOn,
-//                        contentDescription = "image",
-//                        tint = Color.Green
-//                    )
-//                },
-//            )
-//
-//        }
+        Box() {
+            
 
-
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            properties = viewModel.state.properties,
-            cameraPositionState = cameraPositionState,
-            uiSettings = uiSettings,
-        ) {
-
-
-//
-//            Card (modifier = Modifier.background(Color.Transparent)
-//                .padding(12.dp)
-//                ,elevation = 10.dp
-//            ){
-//                OutlinedTextField(
-//                    value =singapore.latitude.toString(),
-//
-//                    onValueChange = {
-//
-//                    },
-//                    textStyle = TextStyle(
-//                        color = Color.Red,
-//                    ),
-//                    modifier = Modifier.background(Color.Transparent)
-//                    , leadingIcon = {
-//                        // In this method we are specifying
-//                        // our leading icon and its color.
-//                        Icon(
-//                            imageVector = Icons.Default.LocationOn,
-//                            contentDescription = "image",
-//                            tint = Color.Green
-//                        )
-//                    },
-//                )
-//
-//            }
-//
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                properties = viewModel.state.properties,
+                cameraPositionState = cameraPositionState,
+                uiSettings = uiSettings,
+            ) {
 
 
 
+                if (viewModel.state.collecting) {
+
+                    viewModel.currentPin?.let{
+                        Marker(
+                            position = LatLng(it.latitude, it.longitude),
+                            title = "Current location",
+                            icon = BitmapDescriptorFactory.defaultMarker(
+                                BitmapDescriptorFactory.HUE_GREEN
+                            )
+                        )
+                    }
 
 
-            Marker(
-                position = LatLng(singapore.latitude, singapore.longitude),
-                title = "Current (${singapore.latitude}, ${singapore.longitude}, ${getAddress(LocalContext.current, singapore)})",
-                icon = BitmapDescriptorFactory.defaultMarker(
-                    BitmapDescriptorFactory.HUE_GREEN
-                )
+                }
+
+                if (viewModel.state.showPinHistory) {
+
+                    viewModel.state.pins.forEach { pin ->
+                        Marker(
+                            position = LatLng(pin.latitude, pin.longitude),
+                            title = "Parking spot (${pin.latitude}, ${pin.longitude})",
+                            snippet = "Long click to delete",
+                            onInfoWindowLongClick = {
+                                //viewModel.onEvent(MapEvent.OnInfoWindowLongClick(spot))
+                            },
+                            onClick = {
+                                it.showInfoWindow()
+                                true
+                            },
+                            icon = BitmapDescriptorFactory.defaultMarker(
+                               if(pin.current) BitmapDescriptorFactory.HUE_BLUE else  BitmapDescriptorFactory.HUE_RED
+                            )
+                        )
+                    }
+                }
+            }
+
+
+            Tracker(
+                description = viewModel.state.distance,
+                isTracking = viewModel.state.isLoading,
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp)
+                    .align(Alignment.TopStart)
             )
 
+            OutlinedButton(
+                onClick = {
+                    viewModel.onEvent(MapEvent.ToggleHistoryPins)
+                },
+
+                modifier= Modifier
+                    .padding(top = 16.dp, end = 16.dp)
+                    .size(50.dp)
+                    .align(Alignment.TopEnd),
+                shape = CircleShape,
+                border= BorderStroke(1.dp, Color.Blue),
+                contentPadding = PaddingValues(0.dp),  //avoid the little icon
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+            ) {
+                Icon(
+                    Icons.Default.History,
+                    contentDescription = "content description")
+            }
 
 
-//            viewModel.state.parkingSpots.forEach { spot ->
-//                Marker(
-//                    position = LatLng(spot.lat, spot.lng),
-//                    title = "Parking spot (${spot.lat}, ${spot.lng})",
-//                    snippet = "Long click to delete",
-//                    onInfoWindowLongClick = {
-//                        viewModel.onEvent(MapEvent.OnInfoWindowLongClick(spot))
-//                    },
-//                    onClick = {
-//                        it.showInfoWindow()
-//                        true
-//                    },
-//                    icon = BitmapDescriptorFactory.defaultMarker(
-//                        BitmapDescriptorFactory.HUE_GREEN
-//                    )
-//                )
-//            }
+
+            OutlinedButton(
+                onClick = {
+                    viewModel.onEvent(MapEvent.SetCurrentPosition(singapore.toPin(context, true)))
+                },
+
+                modifier= Modifier
+                    .padding(top = 80.dp, end = 16.dp)
+                    .size(50.dp)
+                    .align(Alignment.TopEnd),
+                shape = CircleShape,
+                border= BorderStroke(1.dp, Color.Blue),
+                contentPadding = PaddingValues(0.dp),  //avoid the little icon
+                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+            ) {
+                Icon(
+                    Icons.Default.MarkAsUnread,
+                    contentDescription = "content description")
+            }
+
+
+
         }
-
-
-
-
-
 
 
 
@@ -199,13 +215,7 @@ fun MapScreen(
 }
 
 
-private fun getAddress(context: Context, location: LatLng) : String{
 
-    val geocoder = Geocoder(context, Locale.getDefault());
-
-    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
-    return addresses[0].getAddressLine(0);
-}
 
 
 

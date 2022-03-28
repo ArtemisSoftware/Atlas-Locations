@@ -7,7 +7,9 @@ data class Pin (
     val latitude: Double,
     val longitude: Double,
     val date: Date,
-    val address: String){
+    val address: String,
+    val current: Boolean
+){
 
     companion object{
 
@@ -17,7 +19,8 @@ data class Pin (
                 latitude = 1.35,
                 longitude = 103.87,
                 date = Date(),
-                address = "Greek Pantheon Street"
+                address = "Greek Pantheon Street",
+                current = false
             )
         }
     }

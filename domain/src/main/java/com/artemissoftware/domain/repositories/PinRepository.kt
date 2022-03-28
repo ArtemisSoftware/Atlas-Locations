@@ -11,7 +11,7 @@ interface PinRepository {
 
     fun getPins(): Flow<List<Pin>>
 
-    fun getLastLocation(): Pin?
+    suspend fun getLastLocation(): Pin?
 
     suspend fun deleteOldestPin()
 }

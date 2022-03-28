@@ -8,5 +8,6 @@ data class PinEntity(
     val lat: Double,
     val lng: Double,
     val address: String,
+    val current: Boolean,
     @PrimaryKey val id: Int? = null
 )

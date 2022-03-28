@@ -10,7 +10,8 @@ fun PinEntity.toPin(): Pin {
         longitude = lng,
         id = id,
         date = Date(),
-        address = address
+        address = address,
+        current = current
     )
 }
 
@@ -18,6 +19,7 @@ fun Pin.toPinEntity(): PinEntity {
     return PinEntity(
         lat = latitude,
         lng = longitude,
-        address = address
+        address = address,
+        current = current
     )
 }
