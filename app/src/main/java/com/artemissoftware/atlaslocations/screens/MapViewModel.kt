@@ -1,6 +1,5 @@
 package com.artemissoftware.atlaslocations.screens
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,9 +38,9 @@ class MapsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getPins().collectLatest { spots ->
+            repository.getPins().collectLatest { pins ->
                 state = state.copy(
-                    pins = spots
+                    pins = pins
                 )
             }
         }
@@ -78,33 +77,16 @@ class MapsViewModel @Inject constructor(
         }
     }
 
+
+
     private fun setCurrentPosition(pin: Pin) {
 
         currentPin = pin
 
-        viewModelScope.launch {
-
-            setCurrentPositionUseCase(pin)
-                .onEach { result ->
-
-                    state = when (result) {
-
-                        is Resource.Loading -> {
-                            state.copy(
-                                isLoading = true,
-                                pins = emptyList()
-                            )
-                        }
-                        else ->{
-                            state.copy(
-                                isLoading = false,
-                                collecting = true,
-                            )
-                        }
-
-                    }
-                }.launchIn(this)
-        }
+        state = state.copy(
+            pins = listOf(pin),
+            trackState = TrackState.COLLECTING
+        )
     }
 
     private fun updateLocation(pin: Pin) {
@@ -114,25 +96,36 @@ class MapsViewModel @Inject constructor(
 
             delay(1000L)
 
-            updateLocationUseCase(pin)
-                .onEach { result ->
+            currentPin?.let {
 
-                    state = when (result) {
+                updateLocationUseCase(currentPin = it, pin =pin)
+                    .onEach { result ->
 
-                        is Resource.Loading -> {
-                            state.copy(
-                                isLoading = true
-                            )
+                        state = when (result) {
+
+                            is Resource.Loading -> {
+                                state.copy(
+                                    distance = result.message!!
+                                )
+                            }
+
+                            is Resource.Success -> {
+                                state.copy(
+                                    trackState = TrackState.LOCATION_FOUND,
+                                    pins = listOf(it, pin)
+                                )
+                            }
+                            else ->{
+                                state.copy(
+                                    trackState = TrackState.IDLE,
+                                )
+                            }
+
                         }
-                        else ->{
-                            state.copy(
-                                isLoading = false,
-                                distance = result.data!!
-                            )
-                        }
+                    }.launchIn(this)
+            }
 
-                    }
-                }.launchIn(this)
+
         }
     }
 
@@ -157,7 +150,7 @@ class MapsViewModel @Inject constructor(
                             state.copy(
                                 isLoading = false,
                                 pins = emptyList(),
-                                collecting = false
+                                trackState = TrackState.IDLE
                             )
                         }
 

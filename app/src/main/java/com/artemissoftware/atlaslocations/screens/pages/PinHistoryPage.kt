@@ -3,11 +3,13 @@ package com.artemissoftware.atlaslocations.screens.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +27,8 @@ fun PinHistoryPage(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
 
@@ -36,18 +39,18 @@ fun PinHistoryPage(
         ) {
 
             Text(
-                text = "Location History",
+                text = "Location Status",
                 modifier = Modifier.weight(.80f)
             )
 
-            if(pins.isNotEmpty()) {
+            if(pins.isNotEmpty() && pins.size == 2) {
 
                 IconButton(onClick = {
                     onRemovePins()
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete",
+                        imageVector = Icons.Filled.Save,
+                        contentDescription = "Save",
                     )
                 }
             }
@@ -55,10 +58,16 @@ fun PinHistoryPage(
 
         if(pins.isNotEmpty()) {
 
-            LazyColumn(/*modifier = Modifier.fillMaxHeight()*/) {
-                items(pins) { pin ->
-                    PinCard(pin = pin)
-                }
+            if(pins.size == 2){
+                PinCard(pin = pins[0])
+                PinCard(pin = pins[1])
+            }
+            else{
+                PinCard(pin = pins[0])
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(32.dp),
+                )
             }
         }
         else{
@@ -73,5 +82,5 @@ fun PinHistoryPage(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    PinHistoryPage(pins = listOf(Pin.getMock(), Pin.getMock()), onRemovePins = {})
+    PinHistoryPage(pins = listOf(Pin.getMock()/*, Pin.getMock()*/), onRemovePins = {})
 }

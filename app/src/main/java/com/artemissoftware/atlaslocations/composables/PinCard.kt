@@ -31,7 +31,7 @@ fun PinCard(pin: Pin){
             Icon(
                 imageVector = Icons.Default.Place,
                 contentDescription = "",
-                tint = if(pin.current) Color.Blue else Color.Red,
+                tint = if(pin.current) Color.Green else Color.Red,
                 modifier = Modifier.padding(8.dp)
             )
 
@@ -40,7 +40,7 @@ fun PinCard(pin: Pin){
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                PinDetail( description = pin.id?.toString() + " " + pin.address)
+                PinDetail( description = pin.address)
                 PinDetail(title = "latitude", description = pin.latitude.toString())
                 PinDetail(title = "longitude", description = pin.longitude.toString())
                 PinDetail(description = pin.date.toString())

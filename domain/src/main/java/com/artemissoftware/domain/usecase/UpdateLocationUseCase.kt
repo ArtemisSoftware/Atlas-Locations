@@ -13,31 +13,15 @@ class UpdateLocationUseCase @Inject constructor(
     private val pinRepository: PinRepository
     ) {
 
-    operator fun invoke(pin : Pin): Flow<Resource<String>> = flow {
+    operator fun invoke(currentPin: Pin, pin : Pin): Flow<Resource<Pin>> = flow {
 
-        val lastPin = pinRepository.getLastLocation()
+        var distance = distance(currentPin, pin)
 
-        var dist = "---"
+        emit(Resource.Loading(message = distance))
 
-        lastPin?.let{
-
-            dist = distance(lastPin, pin)
-
-
-            if(isValidDistance(lastPin, pin)){
-
-                dist += " XX"
-
-                emit(Resource.Loading())
-
-                //pinRepository.deleteOldestPin()
-                pinRepository.insertPin(pin)
-            }
-        } ?: kotlin.run {
-            pinRepository.insertPin(pin)
+        if(isValidDistance(currentPin, pin)){
+            emit(Resource.Success(pin))
         }
-
-        emit(Resource.Success(dist))
     }
 
     private fun distance(lastPin: Pin, pin: Pin): String {

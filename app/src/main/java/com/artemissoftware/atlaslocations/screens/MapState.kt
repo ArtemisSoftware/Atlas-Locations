@@ -9,6 +9,6 @@ data class MapState(
     val isStylishMap: Boolean = false,
     val showPinHistory: Boolean = false,
     val isLoading: Boolean = false,
-    val collecting: Boolean = false,
+    val trackState: TrackState = TrackState.IDLE,
     val distance: String = "*",
 )
