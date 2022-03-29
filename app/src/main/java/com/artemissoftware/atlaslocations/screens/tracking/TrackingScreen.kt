@@ -3,16 +3,22 @@ package com.artemissoftware.atlaslocations.screens
 import android.location.Location
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.artemissoftware.atlaslocations.R
 import com.artemissoftware.atlaslocations.composables.Tracker
 import com.artemissoftware.atlaslocations.screens.mappers.toPin
 import com.artemissoftware.atlaslocations.screens.navigation.Screen
@@ -55,55 +61,55 @@ fun TrackingScreen(
     ) {
 
 
-
-
-
-
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(8.dp),
             elevation = 4.dp
         ) {
             Column(
-                modifier = Modifier.padding(15.dp)
+                modifier = Modifier.padding(16.dp)
             ) {
 
 
-                Text(text = "Current location")
-
-                viewModel.currentPin?.let{
-
-                    Text(text = "Latitude: ${it.latitude}")
-                    Text(text = "Longitude: ${it.longitude}")
-                }
-
+                Icon(
+                    imageVector = Icons.Default.Place,
+                    contentDescription = "",
+                    tint = Color.Red,
+                    modifier = Modifier.size(80.dp).align(Alignment.CenterHorizontally)
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
 
+                viewModel.currentPin?.let{
+
+                    Text(text = stringResource(R.string.current_location))
+                    Text(text = stringResource(R.string.latitude) +": ${it.latitude}")
+                    Text(text = stringResource(R.string.longitude) + ": ${it.longitude}")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Tracker(
                     description = viewModel.state.distance,
                     isTracking = viewModel.state.trackState,
-                    modifier = Modifier
-                        .padding(top = 16.dp, start = 16.dp)
-
                 )
 
 
                 if(viewModel.state.pins.size == 2) {
                     val pin = viewModel.state.pins[1]
 
-                    Text(text = "Destination location")
-                    Text(text = "Latitude:${pin.latitude}")
-                    Text(text = "Longitude: ${pin.longitude}")
+                    Text(text = stringResource(R.string.destination_location))
+                    Text(text = stringResource(R.string.latitude) +": ${pin.latitude}")
+                    Text(text = stringResource(R.string.longitude) + ": ${pin.longitude}")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if(viewModel.state.pins.size == 2) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Destination location was found")
+                    Text(text = stringResource(R.string.destination_location_found))
                     Spacer(modifier = Modifier.height(8.dp))
 
                     OutlinedButton(onClick = {
@@ -111,7 +117,7 @@ fun TrackingScreen(
                         navController.navigate(Screen.MapScreen.route)
 
                     }) {
-                        Text("Check pins on the map")
+                        Text(stringResource(R.string.check_pins_on_map))
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -128,7 +134,9 @@ fun TrackingScreen(
                         viewModel.onEvent(MapEvent.StartTracking)
                     }) {
 
-                        val title = if(viewModel.state.trackState ==TrackState.LOCATION_FOUND) "New search" else "Start looking"
+                        val title = if(viewModel.state.trackState ==TrackState.LOCATION_FOUND) stringResource(
+                                                    R.string.new_search) else stringResource(
+                                                    R.string.start_looking)
                         Text(text =  title)
                     }
                 }
@@ -138,21 +146,13 @@ fun TrackingScreen(
                         onStopLocationUpdates()
                         viewModel.onEvent(MapEvent.CancelTracking)
                     }) {
-                        Text("Cancel tracking")
+                        Text(stringResource(R.string.cancel_tracking))
                     }
                 }
 
-
-
-
-
-
             }
         }
-
     }
-
-
 
 
 }

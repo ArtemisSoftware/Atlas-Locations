@@ -31,7 +31,6 @@ class MapsViewModel @Inject constructor(
     private val saveDistanceUseCase: SaveDistanceUseCase
 ): ViewModel() {
 
-    var lolo by mutableStateOf<Location?>(null)
 
     var state by mutableStateOf(MapState())
 
@@ -39,15 +38,6 @@ class MapsViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
-    init {
-        viewModelScope.launch {
-            repository.getPins().collectLatest { pins ->
-                state = state.copy(
-                    pins = pins
-                )
-            }
-        }
-    }
 
     fun onEvent(event: MapEvent) {
         when(event) {
@@ -61,18 +51,8 @@ class MapsViewModel @Inject constructor(
                     isStylishMap = !state.isStylishMap
                 )
             }
-
-            is MapEvent.ToggleHistoryPins -> {
-                state = state.copy(
-                    showPinHistory = !state.showPinHistory
-                )
-            }
-
             is MapEvent.UpdateLocation -> {
                 updateLocation(event.pin)
-            }
-            is MapEvent.DeleteHistory -> {
-                deleteHistory()
             }
             is MapEvent.SetCurrentPosition -> {
                 setCurrentPosition(event.pin)
@@ -171,34 +151,5 @@ class MapsViewModel @Inject constructor(
         }
     }
 
-
-    private fun deleteHistory() {
-
-        currentPin = null
-
-        viewModelScope.launch {
-
-            deletePinsHistoryUseCase()
-                .onEach { result ->
-
-                    state = when (result) {
-
-                        is Resource.Loading -> {
-                            state.copy(
-                                isLoading = true
-                            )
-                        }
-                        else ->{
-                            state.copy(
-                                isLoading = false,
-                                pins = emptyList(),
-                                trackState = TrackState.IDLE
-                            )
-                        }
-
-                    }
-                }.launchIn(this)
-        }
-    }
 
 }

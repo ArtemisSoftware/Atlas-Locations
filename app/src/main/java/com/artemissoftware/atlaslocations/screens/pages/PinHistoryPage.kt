@@ -1,14 +1,11 @@
 package com.artemissoftware.atlaslocations.screens.pages
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,9 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.atlaslocations.composables.PinCard
-import com.artemissoftware.domain.LocationConstants
-import com.artemissoftware.domain.LocationConstants.VALID_DISTANCE_BETWEEN_PINS
-import com.artemissoftware.domain.LocationConstants.calculateDistance
+import com.artemissoftware.domain.LocationHelper.VALID_DISTANCE_BETWEEN_PINS
+import com.artemissoftware.domain.LocationHelper.calculateDistance
 import com.artemissoftware.domain.models.Pin
 
 @Composable

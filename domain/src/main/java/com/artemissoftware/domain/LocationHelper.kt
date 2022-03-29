@@ -2,10 +2,10 @@ package com.artemissoftware.domain
 
 import com.artemissoftware.domain.models.Pin
 
-object LocationConstants {
+object LocationHelper {
 
     const val MAX_LOCATIONS = 5
-    const val VALID_DISTANCE_BETWEEN_PINS = 0 //in meters
+    const val VALID_DISTANCE_BETWEEN_PINS = 9 //in meters
     const val VALID_DISTANCE_BETWEEN_PINS_MAX = VALID_DISTANCE_BETWEEN_PINS + 1 //in meters
 
     const val METERS_IN_MILE = 1609.344
@@ -55,5 +55,6 @@ object LocationConstants {
     fun milesToMeters(miles: Double): Double {
         return miles * METERS_IN_MILE
     }
+
 
 }

@@ -39,10 +39,7 @@ fun MapNavigation(
         composable(route = Screen.MapScreen.route){
             MapScreen(
                 //navController = navHostController
-                viewModel = viewModel,
-                onCurrentLocation = onCurrentLocation,
-                onStartLocationUpdates = onStartLocationUpdates,
-                onStopLocationUpdates = onStopLocationUpdates
+                viewModel = viewModel
             )
         }
 

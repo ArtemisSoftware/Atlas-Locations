@@ -1,9 +1,7 @@
 package com.artemissoftware.domain.usecase
 
-import com.artemissoftware.domain.LocationConstants.METERS_IN_MILE
-import com.artemissoftware.domain.LocationConstants.VALID_DISTANCE_BETWEEN_PINS
-import com.artemissoftware.domain.LocationConstants.VALID_DISTANCE_BETWEEN_PINS_MAX
-import com.artemissoftware.domain.LocationConstants.calculateDistance
+import com.artemissoftware.domain.LocationHelper.VALID_DISTANCE_BETWEEN_PINS
+import com.artemissoftware.domain.LocationHelper.calculateDistance
 import com.artemissoftware.domain.Resource
 import com.artemissoftware.domain.models.Pin
 import com.artemissoftware.domain.repositories.PinRepository

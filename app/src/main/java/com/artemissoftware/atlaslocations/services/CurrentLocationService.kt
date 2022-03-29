@@ -1,4 +1,4 @@
-package com.artemissoftware.atlaslocations.screens
+package com.artemissoftware.atlaslocations.services
 
 import android.app.*
 import android.content.Context
@@ -13,7 +13,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
-import java.util.concurrent.TimeUnit
 import com.artemissoftware.atlaslocations.MainActivity
 import com.artemissoftware.atlaslocations.R
 import com.artemissoftware.atlaslocations.util.SharedPreferenceUtil

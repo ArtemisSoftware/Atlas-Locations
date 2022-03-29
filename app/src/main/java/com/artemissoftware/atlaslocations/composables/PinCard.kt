@@ -10,8 +10,10 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.artemissoftware.atlaslocations.R
 import com.artemissoftware.domain.models.Pin
 
 @Composable
@@ -41,8 +43,8 @@ fun PinCard(pin: Pin){
             ) {
 
                 PinDetail( description = pin.address)
-                PinDetail(title = "latitude", description = pin.latitude.toString())
-                PinDetail(title = "longitude", description = pin.longitude.toString())
+                PinDetail(title = stringResource(R.string.latitude), description = pin.latitude.toString())
+                PinDetail(title = stringResource(R.string.longitude), description = pin.longitude.toString())
                 PinDetail(description = pin.date.toString())
             }
 
@@ -67,5 +69,5 @@ private fun PinDetail(title: String? = null, description: String){
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    PinCard(pin = com.artemissoftware.domain.models.Pin.getMock())
+    PinCard(pin = Pin.getMock())
 }
