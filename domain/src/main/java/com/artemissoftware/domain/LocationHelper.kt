@@ -5,7 +5,7 @@ import com.artemissoftware.domain.models.Pin
 object LocationHelper {
 
     const val MAX_LOCATIONS = 5
-    const val VALID_DISTANCE_BETWEEN_PINS = 9 //in meters
+    const val VALID_DISTANCE_BETWEEN_PINS = 50 //in meters
     const val VALID_DISTANCE_BETWEEN_PINS_MAX = VALID_DISTANCE_BETWEEN_PINS + 1 //in meters
 
     const val METERS_IN_MILE = 1609.344
