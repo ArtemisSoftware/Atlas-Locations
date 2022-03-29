@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PinRepository {
 
-    suspend fun insertPin(pin: Pin)
+    suspend fun insertPins(pins: List<Pin>)
 
     suspend fun deletePins()
 

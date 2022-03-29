@@ -16,12 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artemissoftware.atlaslocations.composables.PinCard
+import com.artemissoftware.domain.LocationConstants
+import com.artemissoftware.domain.LocationConstants.VALID_DISTANCE_BETWEEN_PINS
+import com.artemissoftware.domain.LocationConstants.calculateDistance
 import com.artemissoftware.domain.models.Pin
 
 @Composable
 fun PinHistoryPage(
     pins: List<Pin>,
-    onRemovePins: () -> Unit){
+    locationDistance: Int = VALID_DISTANCE_BETWEEN_PINS,
+    onRemovePins: () -> Unit
+){
 
     Column(
         modifier = Modifier
@@ -39,7 +44,7 @@ fun PinHistoryPage(
         ) {
 
             Text(
-                text = "Location Status",
+                text = if(pins.size == 2) "New location found" else "Location Status",
                 modifier = Modifier.weight(.80f)
             )
 
@@ -56,18 +61,39 @@ fun PinHistoryPage(
             }
         }
 
+
+
+
         if(pins.isNotEmpty()) {
 
             if(pins.size == 2){
+                Text(
+                    text = "Distance: ${calculateDistance(pins[0], pins[1])} m ",
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
                 PinCard(pin = pins[0])
                 PinCard(pin = pins[1])
             }
             else{
                 PinCard(pin = pins[0])
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(32.dp),
-                )
+
+                Row(
+
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(32.dp),
+                    )
+
+                    Text(
+                        text = "Location distance $locationDistance m ",
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                }
+
+
             }
         }
         else{
@@ -82,5 +108,5 @@ fun PinHistoryPage(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    PinHistoryPage(pins = listOf(Pin.getMock()/*, Pin.getMock()*/), onRemovePins = {})
+    PinHistoryPage(pins = listOf(Pin.getMock()/*, Pin.getMock()*/), onRemovePins = {} , locationDistance = VALID_DISTANCE_BETWEEN_PINS)
 }

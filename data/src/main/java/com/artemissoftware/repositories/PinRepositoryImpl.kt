@@ -13,8 +13,8 @@ class PinRepositoryImpl @Inject constructor(
     private val dao: PinDao
 ): PinRepository {
 
-    override suspend fun insertPin(pin: Pin) {
-        dao.insertPin(pin.toPinEntity())
+    override suspend fun insertPins(pins: List<Pin>) {
+        dao.insertPins(pins.map{ it.toPinEntity() })
     }
 
     override suspend fun deletePins() {

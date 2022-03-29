@@ -7,17 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SetCurrentPositionUseCase @Inject constructor(
+class SaveDistanceUseCase @Inject constructor(
     private val pinRepository: PinRepository
 ) {
 
-    operator fun invoke(pin: Pin): Flow<Resource<Boolean>> = flow {
+    operator fun invoke(pins: List<Pin>) = flow {
 
-        emit(Resource.Loading())
-
-        pinRepository.deletePins()
-        pinRepository.insertPin(pin)
-
+        pinRepository.insertPins(pins)
         emit(Resource.Success(true))
     }
 

@@ -1,5 +1,6 @@
 package com.artemissoftware.atlaslocations.screens
 
+import android.location.Location
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,8 +11,8 @@ import com.artemissoftware.domain.Resource
 import com.artemissoftware.domain.models.Pin
 import com.artemissoftware.domain.repositories.PinRepository
 import com.artemissoftware.domain.usecase.DeletePinsHistoryUseCase
-import com.artemissoftware.domain.usecase.SetCurrentPositionUseCase
-import com.artemissoftware.domain.usecase.UpdateLocationUseCase
+import com.artemissoftware.domain.usecase.SaveDistanceUseCase
+import com.artemissoftware.domain.usecase.CalculatePinsDistanceUseCase
 import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -25,10 +26,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MapsViewModel @Inject constructor(
     private val repository: PinRepository,
-    private val updateLocationUseCase: UpdateLocationUseCase,
+    private val calculatePinsDistanceUseCase: CalculatePinsDistanceUseCase,
     private val deletePinsHistoryUseCase: DeletePinsHistoryUseCase,
-    private val setCurrentPositionUseCase: SetCurrentPositionUseCase
+    private val saveDistanceUseCase: SaveDistanceUseCase
 ): ViewModel() {
+
+    var lolo by mutableStateOf<Location?>(null)
 
     var state by mutableStateOf(MapState())
 
@@ -74,7 +77,37 @@ class MapsViewModel @Inject constructor(
             is MapEvent.SetCurrentPosition -> {
                 setCurrentPosition(event.pin)
             }
+            is MapEvent.SaveDistance -> {
+                saveDistance()
+            }
+            is MapEvent.StartTracking -> {
+                startTracking()
+            }
+            is MapEvent.CancelTracking -> {
+                cancelTracking()
+            }
         }
+    }
+
+
+    private fun startTracking() {
+
+        currentPin = null
+
+        state = state.copy(
+            pins = emptyList(),
+            trackState = TrackState.COLLECTING
+        )
+    }
+
+    private fun cancelTracking() {
+
+        currentPin = null
+
+        state = state.copy(
+            pins = emptyList(),
+            trackState = TrackState.IDLE
+        )
     }
 
 
@@ -98,7 +131,7 @@ class MapsViewModel @Inject constructor(
 
             currentPin?.let {
 
-                updateLocationUseCase(currentPin = it, pin =pin)
+                calculatePinsDistanceUseCase(currentPin = it, pin =pin)
                     .onEach { result ->
 
                         state = when (result) {
@@ -126,6 +159,15 @@ class MapsViewModel @Inject constructor(
             }
 
 
+        }
+    }
+
+
+    private fun saveDistance() {
+
+        viewModelScope.launch {
+
+            saveDistanceUseCase(state.pins).onEach { }.launchIn(this)
         }
     }
 

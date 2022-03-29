@@ -33,7 +33,7 @@ class CurrentLocationService : Service() {
 
 
     // location updates interval - 10sec
-    private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 1 * 1000
+    private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 2 * 1000
 
     // fastest updates interval - 5 sec
     // location updates will be received if another app is requesting the locations
@@ -47,7 +47,7 @@ class CurrentLocationService : Service() {
         locationRequest = LocationRequest.create().apply {
             interval = UPDATE_INTERVAL_IN_MILLISECONDS//TimeUnit.SECONDS.toMillis(60)
             fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS//TimeUnit.SECONDS.toMillis(30)
-            maxWaitTime = TimeUnit.MINUTES.toMillis(2)
+            maxWaitTime = 2500
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         }
