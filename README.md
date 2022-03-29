@@ -6,7 +6,7 @@ App that tracks a specific distance
 App that tracks the distance between the user current location and X amount of meters.
 The app has two screens. One to track and another to show pins on the map
 
-In order to use the app you should introduce your own api key on the manifest file.
+In order to use the map you should introduce your own api key on the manifest file.
 To change the distance change the variable VALID_DISTANCE_BETWEEN_PINS on the file LocationHelper
 
 When a location is found you can check it on a map and on a bottom sheet for more details.
